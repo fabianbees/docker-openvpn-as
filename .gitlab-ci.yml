@@ -8,7 +8,7 @@ variables:
   # Override CI_PROJECT_PATH for using correct DOCKERHUB path
   CI_PROJECT_PATH: "fabianbees/openvpn-as"
   OPENVPNAS_VERSION: ""
-  VERSION: "2.11.2"
+  VERSION: "2.11.3"
 
 # Build Stages
 stages:
