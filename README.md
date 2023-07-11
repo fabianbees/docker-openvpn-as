@@ -240,8 +240,10 @@ docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
 Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64`.
 
+
 ## Versions
 
+* **11.07.23:** - Bump to version 2.12.0.
 * **01.07.21:** - Rebase master/latest to focal.
 * **15.06.20:** - Add fixes for 2.9.0.
 * **04.11.20:** - `xenial` tag is deprecated and there will be no further releases for that tag.

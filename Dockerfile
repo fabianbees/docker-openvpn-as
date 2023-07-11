@@ -15,6 +15,7 @@ RUN \
  apt update && \
  apt upgrade -y && \
  apt install -y \
+	systemd \
 	bridge-utils \
 	file \
 	gnupg \
