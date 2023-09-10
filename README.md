@@ -29,10 +29,10 @@ Simply pulling `fabianbees/openvpn-as` should retrieve the correct image for you
 
 The architectures supported by this image are:
 
-| Architecture | Tag |
-| :----: | --- |
-| x86-64 | latest |
-| arm64 | latest |
+| Architecture | Image | Tag | Build |
+|:------------------:|:------------------:|:--------------:|:-----------------:|
+| x86-64 | fabianbees/openvpn-as | latest | ![pipeline status](https://gitlab.fabianbees.de/fabianbees/docker-openvpn-as/badges/master/pipeline.svg) |
+| arm64 | fabianbees/openvpn-as | latest | ![pipeline status](https://gitlab.fabianbees.de/fabianbees/docker-openvpn-as/badges/master/pipeline.svg) |
 
 ## Version Tags
 
