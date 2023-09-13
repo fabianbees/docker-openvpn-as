@@ -16,5 +16,4 @@ echo "Stopping openvpn-as now; will start again later after configuring"
 kill `cat /var/run/openvpnas.pid`
 fi
 
-chown -R abc:abc \
-	/config
+chown -R abc:abc /config

@@ -1,4 +1,4 @@
-FROM ghcr.io/linuxserver/baseimage-ubuntu:focal
+FROM ghcr.io/linuxserver/baseimage-ubuntu:jammy
 
 # set version label
 ARG BUILD_DATE
@@ -30,19 +30,16 @@ RUN \
 	libmagic1 \
 	libmariadb3 \
 	libmnl0 \
-	libmpdec2 \
 	libmysqlclient21 \
 	libnetfilter-conntrack3 \
 	libnfnetlink0 \
 	libpcap0.8 \
 	libpython3-stdlib \
-	libpython3.8-minimal \
-	libpython3.8-stdlib \
 	libxtables12 \
 	mime-support \
 	mysql-common \
 	net-tools \
-	python3 \
+	python3-minimal \
 	python3-decorator \
 	python3-ldap3 \
 	python3-migrate \
@@ -55,22 +52,22 @@ RUN \
 	python3-sqlalchemy \
 	python3-sqlparse \
 	python3-tempita \
-	python3.8 \
-	python3.8-minimal \
 	sqlite3 \
 	xz-utils \
-	# additional dependencies
+	# openvps-as dependencies:
 	dmidecode \
 	ieee-data \
-	libicu66 \
-	libxml2 \
+	libnl-3-200 \
+	libnl-genl-3-200 \
 	libxmlsec1 \
 	libxmlsec1-openssl \
 	libxslt1.1 \
 	python3-arrow \
 	python3-attr \
 	python3-automat \
+	python3-bcrypt \
 	python3-bs4 \
+	python3-cffi \
 	python3-cffi-backend \
 	python3-chardet \
 	python3-click \
@@ -78,6 +75,7 @@ RUN \
 	python3-constantly \
 	python3-cryptography \
 	python3-dateutil \
+	python3-defusedxml \
 	python3-hamcrest \
 	python3-html5lib \
 	python3-hyperlink \
@@ -86,19 +84,23 @@ RUN \
 	python3-lxml \
 	python3-netaddr \
 	python3-openssl \
+	python3-ply \
 	python3-pyasn1-modules \
+	python3-pycparser \
 	python3-service-identity \
 	python3-soupsieve \
 	python3-twisted \
-	python3-twisted-bin \
 	python3-webencodings \
-	python3-zope.interface
+	python3-zope.interface && \
+	rm -rf /var/cache/apt /var/lib/apt/lists
+
 
 RUN	echo "**** add openvpn-as repo ****" && \
-	curl -s https://as-repository.openvpn.net/as-repo-public.gpg | apt-key add - && \
-	echo "deb http://as-repository.openvpn.net/as/debian focal main">/etc/apt/sources.list.d/openvpn-as-repo.list && \
+	# save gpg key in in /usr/share/keyrings/
+	curl https://as-repository.openvpn.net/as-repo-public.gpg | gpg --dearmor | tee /usr/share/keyrings/openvpn-as_repo-public.gpg && \
+	echo "deb [signed-by=/usr/share/keyrings/openvpn-as_repo-public.gpg] http://as-repository.openvpn.net/as/debian jammy main">/etc/apt/sources.list.d/openvpn-as-repo.list && \
 	if [ -z ${OPENVPNAS_VERSION+x} ]; then \
-		OPENVPNAS_VERSION=$(curl -sX GET http://as-repository.openvpn.net/as/debian/dists/focal/main/binary-amd64/Packages.gz | gunzip -c \
+		OPENVPNAS_VERSION=$(curl -sX GET http://as-repository.openvpn.net/as/debian/dists/jammy/main/binary-amd64/Packages.gz | gunzip -c \
 		|grep -A 7 -m 1 "Package: openvpn-as" | awk -F ": " '/Version/{print $2;exit}');\
 	fi && \
 	echo "$OPENVPNAS_VERSION" > /version.txt && \
@@ -107,8 +109,7 @@ RUN	echo "**** add openvpn-as repo ****" && \
 	echo "**** create admin user and set default password for it ****" && \
 	useradd -s /sbin/nologin admin && \
 	echo "admin:passwOrd+2" | chpasswd && \
-	rm -rf \
-		/tmp/*
+	rm -rf /tmp/*
 
 # add local files
 COPY /root /
@@ -116,3 +117,4 @@ COPY /root /
 # ports and volumes
 EXPOSE 943/tcp 1194/udp 9443/tcp
 VOLUME /config
+
