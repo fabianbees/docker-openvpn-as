@@ -54,8 +54,45 @@ RUN \
 	python3-sqlparse \
 	python3-tempita \
 	sqlite3 \
-	xz-utils 
-	# additional dependencies
+	xz-utils \
+	# openvps-as dependencies:
+	dmidecode \
+	ieee-data \
+	libnl-3-200 \
+	libnl-genl-3-200 \
+	libxmlsec1 \
+	libxmlsec1-openssl \
+	libxslt1.1 \
+	python3-arrow \
+	python3-attr \
+	python3-automat \
+	python3-bcrypt \
+	python3-bs4 \
+	python3-cffi \
+	python3-cffi-backend \
+	python3-chardet \
+	python3-click \
+	python3-colorama \
+	python3-constantly \
+	python3-cryptography \
+	python3-dateutil \
+	python3-defusedxml \
+	python3-hamcrest \
+	python3-html5lib \
+	python3-hyperlink \
+	python3-idna \
+	python3-incremental \
+	python3-lxml \
+	python3-netaddr \
+	python3-openssl \
+	python3-ply \
+	python3-pyasn1-modules \
+	python3-pycparser \
+	python3-service-identity \
+	python3-soupsieve \
+	python3-twisted \
+	python3-webencodings \
+	python3-zope.interface
 
 
 RUN	echo "**** add openvpn-as repo ****" && \

@@ -17,7 +17,7 @@ if [ -f /version.txt ]; then
 	if [ ! -f /config/etc/as.conf ]; then
 		echo "installing openvpn-as for the first time"
 		apt-get update && \
-		apt-get install -y \
+		apt-get install -y --no-install-recommends \
 			openvpn-as=$OPENVPNAS_VERSION
 		echo "Stopping openvpn-as now; will start again later after configuring"
 		kill `cat /var/run/openvpnas.pid`
