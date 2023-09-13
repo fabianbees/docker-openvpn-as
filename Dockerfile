@@ -35,7 +35,6 @@ RUN \
 	libnfnetlink0 \
 	libpcap0.8 \
 	libpython3-stdlib \
-	libpython3-stdlib \
 	libxtables12 \
 	mime-support \
 	mysql-common \
@@ -92,13 +91,14 @@ RUN \
 	python3-soupsieve \
 	python3-twisted \
 	python3-webencodings \
-	python3-zope.interface
+	python3-zope.interface && \
+	rm -rf /var/cache/apt /var/lib/apt/lists
 
 
 RUN	echo "**** add openvpn-as repo ****" && \
-	# TODO: save gpg key in new format. (apt deprecation warning)
-	curl -s https://as-repository.openvpn.net/as-repo-public.gpg | apt-key add - && \
-	echo "deb http://as-repository.openvpn.net/as/debian jammy main">/etc/apt/sources.list.d/openvpn-as-repo.list && \
+	# save gpg key in in /usr/share/keyrings/
+	curl https://as-repository.openvpn.net/as-repo-public.gpg | gpg --dearmor | tee /usr/share/keyrings/openvpn-as_repo-public.gpg && \
+	echo "deb [signed-by=/usr/share/keyrings/openvpn-as_repo-public.gpg] http://as-repository.openvpn.net/as/debian jammy main">/etc/apt/sources.list.d/openvpn-as-repo.list && \
 	if [ -z ${OPENVPNAS_VERSION+x} ]; then \
 		OPENVPNAS_VERSION=$(curl -sX GET http://as-repository.openvpn.net/as/debian/dists/jammy/main/binary-amd64/Packages.gz | gunzip -c \
 		|grep -A 7 -m 1 "Package: openvpn-as" | awk -F ": " '/Version/{print $2;exit}');\

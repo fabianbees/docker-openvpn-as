@@ -40,7 +40,7 @@ This image provides various versions that are available via tags. `latest` tag u
 
 | Tag | Description |
 | :----: | --- |
-| latest | Stable releases based on ubuntu focal |
+| latest | Stable releases based on ubuntu 22.04 LTS (jammy) |
 
 
 ## Application Setup
@@ -137,7 +137,7 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-p 1194/udp` | UDP port. |
 | `-e PUID=1000` | for UserID - see below for explanation |
 | `-e PGID=1000` | for GroupID - see below for explanation |
-| `-e TZ=Europe/London` | Specify a timezone to use EG Europe/London. |
+| `-e TZ=Europe/Berlin` | Specify a timezone to use EG Europe/Berlin. |
 | `-e INTERFACE=eth0` | With bridge networking, leave it as eth0 (or don't include at all), if host or macvlan, set it to your host's network interface, found by running `ifconfig` |
 | `-v /config` | Where openvpn-as should store configuration files. |
 
@@ -241,8 +241,10 @@ docker run --rm --privileged multiarch/qemu-user-static:register --reset
 Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64`.
 
 
+
 ## Versions
 
+* **13.09.23:** - Rebase master/latest to jammy.
 * **11.07.23:** - Bump to version 2.12.0.
 * **01.07.21:** - Rebase master/latest to focal.
 * **15.06.20:** - Add fixes for 2.9.0.
