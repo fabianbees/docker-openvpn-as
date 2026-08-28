@@ -1,9 +1,9 @@
-FROM ghcr.io/linuxserver/baseimage-ubuntu:jammy
+FROM ghcr.io/linuxserver/baseimage-ubuntu:noble
 
 # set version label
 ARG BUILD_DATE
 ARG VERSION
-ARG OPENVPNAS_VERSION 
+ARG OPENVPNAS_VERSION
 LABEL build_version="${VERSION} Build-date:- ${BUILD_DATE}"
 
 
@@ -24,7 +24,6 @@ RUN \
 	libatm1 \
 	libelf1 \
 	libexpat1 \
-	libiptc0 \
 	liblzo2-2 \
 	libmagic-mgc \
 	libmagic1 \
@@ -36,7 +35,8 @@ RUN \
 	libpcap0.8 \
 	libpython3-stdlib \
 	libxtables12 \
-	mime-support \
+	media-types \
+	mailcap \
 	mysql-common \
 	net-tools \
 	python3-minimal \
@@ -81,6 +81,7 @@ RUN \
 	python3-incremental \
 	python3-lxml \
 	python3-netaddr \
+	python3-onelogin-saml2 \
 	python3-ply \
 	python3-pyasn1-modules \
 	python3-pycparser \
@@ -88,6 +89,7 @@ RUN \
 	python3-soupsieve \
 	python3-twisted \
 	python3-webencodings \
+	python3-xmlsec \
 	python3-zope.interface && \
 	rm -rf /var/cache/apt /var/lib/apt/lists
 
@@ -95,11 +97,12 @@ RUN \
 RUN	echo "**** add openvpn-as repo ****" && \
 	# save gpg key in in /usr/share/keyrings/
 	curl -L https://packages.openvpn.net/as-repo-public.gpg | gpg --dearmor | tee /usr/share/keyrings/openvpn-as_repo-public.gpg && \
-	echo "deb [signed-by=/usr/share/keyrings/openvpn-as_repo-public.gpg] http://packages.openvpn.net/as/debian jammy main">/etc/apt/sources.list.d/openvpn-as-repo.list && \
-	# resolve the exact package build for $VERSION (e.g. 2.14.3 -> 2.14.3-5936bcd7-Ubuntu22).
+	# dist must match the base image release above
+	echo "deb [signed-by=/usr/share/keyrings/openvpn-as_repo-public.gpg] http://packages.openvpn.net/as/debian noble main">/etc/apt/sources.list.d/openvpn-as-repo.list && \
+	# resolve the exact package build for $VERSION (e.g. 2.14.3 -> 2.14.3-5936bcd7-Ubuntu24).
 	# the index is not version-sorted, so filter by $VERSION and take the highest.
 	if [ -z "$OPENVPNAS_VERSION" ]; then \
-		OPENVPNAS_VERSION=$(curl -sL "http://packages.openvpn.net/as/debian/dists/jammy/main/binary-$(dpkg --print-architecture)/Packages.gz" | gunzip -c \
+		OPENVPNAS_VERSION=$(curl -sL "http://packages.openvpn.net/as/debian/dists/noble/main/binary-$(dpkg --print-architecture)/Packages.gz" | gunzip -c \
 		| awk '/^Package: openvpn-as$/{p=1} p&&/^Version:/{print $2; p=0}' \
 		| grep "^${VERSION}-" | sort -V | tail -1);\
 	fi && \

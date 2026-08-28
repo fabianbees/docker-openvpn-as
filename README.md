@@ -40,7 +40,7 @@ This image provides various versions that are available via tags. `latest` tag u
 
 | Tag | Description |
 | :----: | --- |
-| latest | Stable releases based on ubuntu 22.04 LTS (jammy) |
+| latest | Stable releases based on ubuntu 24.04 LTS (noble) |
 
 
 ## Application Setup
@@ -244,6 +244,8 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
+* **28.08.26:** - Rebase master/latest to noble.
+* **28.08.26:** - Bump to version 2.14.3.
 * **13.09.23:** - Rebase master/latest to jammy.
 * **11.07.23:** - Bump to version 2.12.0.
 * **01.07.21:** - Rebase master/latest to focal.
