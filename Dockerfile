@@ -73,7 +73,6 @@ RUN \
 	python3-click \
 	python3-colorama \
 	python3-constantly \
-	python3-cryptography \
 	python3-dateutil \
 	python3-defusedxml \
 	python3-hamcrest \
@@ -83,7 +82,6 @@ RUN \
 	python3-incremental \
 	python3-lxml \
 	python3-netaddr \
-	python3-openssl \
 	python3-ply \
 	python3-pyasn1-modules \
 	python3-pycparser \
@@ -97,11 +95,11 @@ RUN \
 
 RUN	echo "**** add openvpn-as repo ****" && \
 	# save gpg key in in /usr/share/keyrings/
-	curl https://as-repository.openvpn.net/as-repo-public.gpg | gpg --dearmor | tee /usr/share/keyrings/openvpn-as_repo-public.gpg && \
-	echo "deb [signed-by=/usr/share/keyrings/openvpn-as_repo-public.gpg] http://as-repository.openvpn.net/as/debian jammy main">/etc/apt/sources.list.d/openvpn-as-repo.list && \
+	curl -L https://packages.openvpn.net/as-repo-public.gpg | gpg --dearmor | tee /usr/share/keyrings/openvpn-as_repo-public.gpg && \
+	echo "deb [signed-by=/usr/share/keyrings/openvpn-as_repo-public.gpg] http://packages.openvpn.net/as/debian jammy main">/etc/apt/sources.list.d/openvpn-as-repo.list && \
 	if [ -z ${OPENVPNAS_VERSION+x} ]; then \
-		OPENVPNAS_VERSION=$(curl -sX GET http://as-repository.openvpn.net/as/debian/dists/jammy/main/binary-amd64/Packages.gz | gunzip -c \
-		|grep -A 7 -m 1 "Package: openvpn-as" | awk -F ": " '/Version/{print $2;exit}');\
+		OPENVPNAS_VERSION=$(curl -sL http://packages.openvpn.net/as/debian/dists/jammy/main/binary-amd64/Packages.gz | gunzip -c \
+		|grep -A 7 -m 1 "^Package: openvpn-as$" | awk -F ": " '/Version/{print $2;exit}');\
 	fi && \
 	echo "$OPENVPNAS_VERSION" > /version.txt && \
 	echo "**** ensure home folder for abc user set to /config ****" && \

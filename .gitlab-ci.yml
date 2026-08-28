@@ -7,8 +7,8 @@ variables:
   DOCKER_HUB: "true"
   # Override CI_PROJECT_PATH for using correct DOCKERHUB path
   CI_PROJECT_PATH: "fabianbees/openvpn-as"
-  OPENVPNAS_VERSION: ""
-  VERSION: "2.13.1"
+  OPENVPNAS_VERSION: "2.14.0-b90cb316-Ubuntu22"
+  VERSION: "2.14.0"
 
 # Build Stages
 stages:
@@ -46,7 +46,7 @@ build:amd64:
   tags:
     - amd64
   script:
-    - docker build --pull --build-arg VERSION -t "$CI_REGISTRY_IMAGE:$CI_APPLICATION_TAG-amd64" -t "$CI_REGISTRY_IMAGE:$VERSION-amd64" .
+    - docker build --pull --build-arg VERSION --build-arg OPENVPNAS_VERSION -t "$CI_REGISTRY_IMAGE:$CI_APPLICATION_TAG-amd64" -t "$CI_REGISTRY_IMAGE:$VERSION-amd64" .
     - docker push "$CI_REGISTRY_IMAGE:$CI_APPLICATION_TAG-amd64"
     - docker push "$CI_REGISTRY_IMAGE:$VERSION-amd64"
 
@@ -60,7 +60,7 @@ build:arm64:
   tags:
     - arm64
   script:
-    - docker build --pull --build-arg VERSION -t "$CI_REGISTRY_IMAGE:$CI_APPLICATION_TAG-arm64" -t "$CI_REGISTRY_IMAGE:$VERSION-arm64" .
+    - docker build --pull --build-arg VERSION --build-arg OPENVPNAS_VERSION -t "$CI_REGISTRY_IMAGE:$CI_APPLICATION_TAG-arm64" -t "$CI_REGISTRY_IMAGE:$VERSION-arm64" .
     - docker push "$CI_REGISTRY_IMAGE:$CI_APPLICATION_TAG-arm64"
     - docker push "$CI_REGISTRY_IMAGE:$VERSION-arm64"
 
@@ -74,7 +74,7 @@ build:armv7:
   tags:
     - armv7
   script:
-    - docker build --pull --build-arg VERSION -t "$CI_REGISTRY_IMAGE:$CI_APPLICATION_TAG-armv7" -t "$CI_REGISTRY_IMAGE:$VERSION-armv7" .
+    - docker build --pull --build-arg VERSION --build-arg OPENVPNAS_VERSION -t "$CI_REGISTRY_IMAGE:$CI_APPLICATION_TAG-armv7" -t "$CI_REGISTRY_IMAGE:$VERSION-armv7" .
     - docker push "$CI_REGISTRY_IMAGE:$CI_APPLICATION_TAG-armv7"
     - docker push "$CI_REGISTRY_IMAGE:$VERSION-armv7"
 

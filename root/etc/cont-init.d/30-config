@@ -19,6 +19,14 @@ if [ -f /version.txt ]; then
 		apt-get update && \
 		apt-get install -y --no-install-recommends \
 			openvpn-as=$OPENVPNAS_VERSION
+		if [ ! -x /config/scripts/openvpnas ]; then
+			echo "openvpn-as install looks incomplete (missing /config/scripts/openvpnas), retrying..."
+			apt-get install --reinstall -y openvpn-as=$OPENVPNAS_VERSION
+		fi
+		if [ ! -x /config/scripts/openvpnas ]; then
+			echo "FATAL: openvpn-as installation failed, /config/scripts/openvpnas still missing after reinstall attempt" >&2
+			exit 1
+		fi
 		echo "Stopping openvpn-as now; will start again later after configuring"
 		kill `cat /var/run/openvpnas.pid`
 		rm /version.txt
@@ -44,6 +52,14 @@ if [ -f /version.txt ]; then
 		apt-get update && \
 		apt-get install -y \
 			openvpn-as=$OPENVPNAS_VERSION
+		if [ ! -x /config/scripts/openvpnas ]; then
+			echo "openvpn-as install looks incomplete (missing /config/scripts/openvpnas), retrying..."
+			apt-get install --reinstall -y openvpn-as=$OPENVPNAS_VERSION
+		fi
+		if [ ! -x /config/scripts/openvpnas ]; then
+			echo "FATAL: openvpn-as installation failed, /config/scripts/openvpnas still missing after reinstall attempt" >&2
+			exit 1
+		fi
 		echo "Stopping openvpn-as now; will start again later after configuring"
 		kill `cat /var/run/openvpnas.pid`
 		rm /version.txt
