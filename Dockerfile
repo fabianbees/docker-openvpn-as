@@ -96,10 +96,17 @@ RUN	echo "**** add openvpn-as repo ****" && \
 	# save gpg key in in /usr/share/keyrings/
 	curl -L https://packages.openvpn.net/as-repo-public.gpg | gpg --dearmor | tee /usr/share/keyrings/openvpn-as_repo-public.gpg && \
 	echo "deb [signed-by=/usr/share/keyrings/openvpn-as_repo-public.gpg] http://packages.openvpn.net/as/debian jammy main">/etc/apt/sources.list.d/openvpn-as-repo.list && \
-	if [ -z ${OPENVPNAS_VERSION+x} ]; then \
-		OPENVPNAS_VERSION=$(curl -sL http://packages.openvpn.net/as/debian/dists/jammy/main/binary-amd64/Packages.gz | gunzip -c \
-		|grep -A 7 -m 1 "^Package: openvpn-as$" | awk -F ": " '/Version/{print $2;exit}');\
+	# resolve the exact package build for $VERSION (e.g. 2.14.3 -> 2.14.3-5936bcd7-Ubuntu22).
+	# the index is not version-sorted, so filter by $VERSION and take the highest.
+	if [ -z "$OPENVPNAS_VERSION" ]; then \
+		OPENVPNAS_VERSION=$(curl -sL "http://packages.openvpn.net/as/debian/dists/jammy/main/binary-$(dpkg --print-architecture)/Packages.gz" | gunzip -c \
+		| awk '/^Package: openvpn-as$/{p=1} p&&/^Version:/{print $2; p=0}' \
+		| grep "^${VERSION}-" | sort -V | tail -1);\
 	fi && \
+	if [ -z "$OPENVPNAS_VERSION" ]; then \
+		echo "FATAL: no openvpn-as package found for VERSION=${VERSION}" >&2; exit 1; \
+	fi && \
+	echo "**** using openvpn-as $OPENVPNAS_VERSION ****" && \
 	echo "$OPENVPNAS_VERSION" > /version.txt && \
 	echo "**** ensure home folder for abc user set to /config ****" && \
 	usermod -d /config abc && \
