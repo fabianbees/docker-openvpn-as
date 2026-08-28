@@ -7,8 +7,8 @@ variables:
   DOCKER_HUB: "true"
   # Override CI_PROJECT_PATH for using correct DOCKERHUB path
   CI_PROJECT_PATH: "fabianbees/openvpn-as"
-  OPENVPNAS_VERSION: "2.14.1-ff013d4d-Ubuntu22"
-  VERSION: "2.14.1"
+  OPENVPNAS_VERSION: "2.14.2-40b190d8-Ubuntu22"
+  VERSION: "2.14.2"
 
 # Build Stages
 stages:

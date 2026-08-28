@@ -42,7 +42,6 @@ RUN \
 	python3-minimal \
 	python3-decorator \
 	python3-ldap3 \
-	python3-migrate \
 	python3-minimal \
 	python3-mysqldb \
 	python3-pbr \
